@@ -14,7 +14,7 @@ https://github.com/BeiYazi0/groupguess
 
 在 HoshinoBot\hoshino\modules 目录下使用以下命令拉取本项目
 
-git clone ttps://github.com/BeiYazi0/groupguess
+git clone https://github.com/BeiYazi0/groupguess
 
 2.启用：
 
