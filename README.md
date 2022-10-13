@@ -42,7 +42,7 @@ PcrDuel(https://github.com/Rs794613/PcrDuel)
 
 ## 备注
 
-因为没在Hoshino插件索引里看到，就自己整了一个。
+因为没在Hoshino插件索引里没看到，就自己整了一个。
 
 如果有更好的，记得和我说一声。
 
