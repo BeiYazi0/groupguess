@@ -40,3 +40,6 @@ dailywife(https://github.com/SonderXiaoming/dailywife)
 
 PcrDuel(https://github.com/Rs794613/PcrDuel)
 
+## 备注
+
+其实基本都是照着PcrDuel提供的猜头像小游戏和dailywife的代码写的。
