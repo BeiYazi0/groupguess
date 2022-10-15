@@ -40,9 +40,3 @@ dailywife(https://github.com/SonderXiaoming/dailywife)
 
 PcrDuel(https://github.com/Rs794613/PcrDuel)
 
-## 备注
-
-因为在Hoshino插件索引里没看到类似功能的插件，就自己整了一个。
-
-如果有更好的，记得和我说一声。
-
