@@ -7,6 +7,7 @@ import httpx
 import hashlib
 import base64
 import os
+import io
 import random
 import asyncio
 
