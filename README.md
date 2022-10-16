@@ -36,9 +36,9 @@ git clone https://github.com/BeiYazi0/groupguess
 
 ## 鸣谢
 
-dailywife(https://github.com/SonderXiaoming/dailywife)
+| [dailywife](https://github.com/SonderXiaoming/dailywife) | [@SonderXiaoming](https://github.com/SonderXiaoming) | 
 
-PcrDuel(https://github.com/Rs794613/PcrDuel)
+| [PcrDuel](https://github.com/Rs794613/PcrDuel) | [@Rs794613](https://github.com/Rs794613) | 
 
 ## 备注
 
