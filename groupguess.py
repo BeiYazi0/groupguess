@@ -29,7 +29,6 @@ sv = Service(
 
 ONE_TURN_TIME=20
 PATCH_SIZE=160
-file = os.getcwd()+"\\hoshino\\modules\\dailywife\\group_friend.png"
 output = os.getcwd()+"\\hoshino\\modules\\dailywife\\group_friend_cut.png"
 DB_PATH = os.path.expanduser('~/.hoshino/group_member_guess_winning_counter.db')
 SCORE_DB_PATH = os.path.expanduser('~/.hoshino/pcr_running_counter.db')
