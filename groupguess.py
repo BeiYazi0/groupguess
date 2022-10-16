@@ -1,5 +1,5 @@
 import hoshino
-from hoshino import Service, priv
+from hoshino import Service, priv, aiorequests
 from hoshino.util import DailyNumberLimiter
 from hoshino.typing import CQEvent
 
@@ -10,7 +10,6 @@ import os
 import random
 import asyncio
 
-from urllib.request import urlretrieve
 from datetime import datetime, timedelta
 import sqlite3
 
@@ -727,8 +726,8 @@ async def dailywife(bot, ev: CQEvent):
     winner_judger.set_correct_chara_id(ev.group_id, wife_id)
 
     url = f"http://q1.qlogo.cn/g?b=qq&nk={wife_id}&s=640"
-    urlretrieve(url,filename=file)
-    img = Image.open(file)
+    content = await (await aiorequests.get(url)).content
+    img = Image.open(io.BytesIO(content))
     w, h = img.size
     l = random.randint(0, w - PATCH_SIZE)
     u = random.randint(0, h - PATCH_SIZE)
@@ -758,9 +757,12 @@ async def dailywife(bot, ev: CQEvent):
 @sv.on_message()
 async def on_input_chara_name(bot, ev: CQEvent):
     content=ev.message[0]
-    if content["type"]!='at':
+    if content["type"] =='at':
+        cid=int(content["data"]["qq"])
+    elif ev.message.extract_plain_text().strip().isdigit():
+        cid = int(ev.message.extract_plain_text().strip())
+    else:
         return
-    cid=int(content["data"]["qq"])
 
     try:
         if winner_judger.get_on_off_status(ev.group_id):
