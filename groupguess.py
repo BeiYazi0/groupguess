@@ -366,6 +366,7 @@ class WinnerJudger:
         self.on = {}
         self.winner = {}
         self.correct_chara_id = {}
+        self.correct_chara_name = {}
 
     def record_winner(self, gid, uid):
         self.winner[gid] = str(uid)
