@@ -44,6 +44,6 @@ git clone https://github.com/BeiYazi0/groupguess
 
 其实基本都是照着PcrDuel提供的猜头像小游戏和dailywife的代码写的。
 
-根据@BlueDeer(https://github.com/BlueDeer233)的意见，修改了一下。为了防扰民，加入了qq号和群昵称。
+根据[@BlueDeer](https://github.com/BlueDeer233)的意见，修改了一下。为了防扰民，加入了qq号和群昵称。
 
 应该不会有什么奇怪的bug吧。
