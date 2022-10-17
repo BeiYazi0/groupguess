@@ -26,7 +26,7 @@ git clone https://github.com/BeiYazi0/groupguess
 
 【猜群友】
 
-猜猜bot随机发送的头像的一小部分来自哪位群友(猜测请发送@xx或qq号)
+猜猜bot随机发送的头像的一小部分来自哪位群友(猜测请发送@xx,qq号或群昵称)
 
 与贵族游戏和赛跑联动联动，猜中可以加金币
 
@@ -43,3 +43,7 @@ git clone https://github.com/BeiYazi0/groupguess
 ## 备注
 
 其实基本都是照着PcrDuel提供的猜头像小游戏和dailywife的代码写的。
+
+根据@BlueDeer(https://github.com/BlueDeer233)的意见，修改了一下。为了防扰民，加入了qq号和群昵称。
+
+应该不会有什么奇怪的bug吧。
