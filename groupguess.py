@@ -21,7 +21,7 @@ sv = Service(
     visible=True,  # 可见性
     enable_on_default=True,  # 默认启用
     bundle="娱乐",  # 分组归类
-    help_='''[猜群友] 猜猜bot随机发送的头像的一小部分来自哪位群友(猜测请发送@xx或qq号)
+    help_='''[猜群友] 猜猜bot随机发送的头像的一小部分来自哪位群友(猜测请发送@xx,qq号或群昵称)
 [猜群友排行] 显示小游戏的群排行榜(只显示前十名)''',  # 帮助说明
 
 )
@@ -376,11 +376,15 @@ class WinnerJudger:
     def get_on_off_status(self, gid):
         return self.on[gid] if self.on.get(gid) is not None else False
 
-    def set_correct_chara_id(self, gid, cid):
+    def set_correct_chara_id(self, gid, cid, member_name):
         self.correct_chara_id[gid] = cid
+        self.correct_chara_name[gid] = member_name
 
-    def get_correct_chara_id(self, gid):
-        return self.correct_chara_id[gid] if self.correct_chara_id.get(gid) is not None else chara.UNKNOWN
+    def correct_chara_check(self, gid, cid):
+        return self.correct_chara_id[gid] == cid or self.correct_chara_name[gid] ==cid 
+    
+    def get_chara_id(self, gid):
+        return self.correct_chara_id[gid]
 
     def turn_on(self, gid):
         self.on[gid] = True
@@ -690,11 +694,10 @@ async def download_url(url: str) -> bytes:
             except Exception as e:
                 print(f"Error downloading {url}, retry {i}/3: {str(e)}")
 
-async def get_wife_info(member_info,qqid,mode):  
+async def get_wife_info(member_name,qqid,mode):  
     img = await download_avatar(qqid)
     base64_str = base64.b64encode(img).decode()
     avatar =  'base64://' + base64_str
-    member_name = (member_info["card"] or member_info["nickname"])
     if mode:
         result = f'''正确答案是：
 [CQ:image,file={avatar}]
@@ -723,7 +726,9 @@ async def dailywife(bot, ev: CQEvent):
     id_list = get_member_list(all_list)
     id_list.remove(bot_id)
     wife_id = random.choice(id_list)
-    winner_judger.set_correct_chara_id(ev.group_id, wife_id)
+    member_info = await bot.get_group_member_info(group_id=groupid,user_id=wife_id)
+    member_name = (member_info["card"] or member_info["nickname"])
+    winner_judger.set_correct_chara_id(ev.group_id, wife_id, member_name)
 
     url = f"http://q1.qlogo.cn/g?b=qq&nk={wife_id}&s=640"
     content = await (await aiorequests.get(url)).content
@@ -750,8 +755,7 @@ async def dailywife(bot, ev: CQEvent):
         winner_judger.turn_off(ev.group_id)
         return
     winner_judger.turn_off(ev.group_id)
-    member_info = await bot.get_group_member_info(group_id=groupid,user_id=wife_id)
-    result = await get_wife_info(member_info,wife_id,1)
+    result = await get_wife_info(member_name,wife_id,1)
     await bot.send(ev, result)
 
 @sv.on_message()
@@ -759,21 +763,23 @@ async def on_input_chara_name(bot, ev: CQEvent):
     content=ev.message[0]
     if content["type"] =='at':
         cid=int(content["data"]["qq"])
-    elif ev.message.extract_plain_text().strip().isdigit():
-        cid = int(ev.message.extract_plain_text().strip())
     else:
-        return
+        cid = ev.message.extract_plain_text().strip()
+        if cid.isdigit():
+            cid=int(cid)
 
     try:
         if winner_judger.get_on_off_status(ev.group_id):
-            if cid == winner_judger.get_correct_chara_id(ev.group_id) and winner_judger.get_winner(ev.group_id) == '':
+            if winner_judger.correct_chara_check(ev.group_id, cid) and winner_judger.get_winner(ev.group_id) == '':
+                cid = winner_judger.get_chara_id(ev.group_id)
                 winner_judger.record_winner(ev.group_id, ev.user_id)
                 winning_counter = WinningCounter()
                 winning_counter._record_winning(ev.group_id, ev.user_id)
                 winning_count = winning_counter._get_winning_number(
                     ev.group_id, ev.user_id)
                 member_info = await bot.get_group_member_info(group_id=ev.group_id,user_id=cid)
-                result = await get_wife_info(member_info,cid,0) 
+                member_name = (member_info["card"] or member_info["nickname"])
+                result = await get_wife_info(member_name,cid,0) 
                 msg_part=f'你猜对了，真厉害！\nTA已经猜对{winning_count}次了~\n'+result
                 duel = DuelCounter()
                 gid = ev.group_id
