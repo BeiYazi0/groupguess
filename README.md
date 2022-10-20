@@ -47,3 +47,5 @@ git clone https://github.com/BeiYazi0/groupguess
 根据[@BlueDeer](https://github.com/BlueDeer233)的意见，修改了一下。为了防扰民，加入了qq号和群昵称。
 
 应该不会有什么奇怪的bug吧。
+
+好像有些头像比较小，再改一下，resize统一大小再裁。另外就是将剪裁图像保存到本地再发送改成直接发送。
