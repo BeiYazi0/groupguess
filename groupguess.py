@@ -1,7 +1,8 @@
 import hoshino
-from hoshino import Service, priv, aiorequests
+from hoshino import Service, priv, aiorequests, util
 from hoshino.util import DailyNumberLimiter
 from hoshino.typing import CQEvent
+from hoshino.typing import MessageSegment as Seg
 
 import httpx
 import hashlib
@@ -29,7 +30,6 @@ sv = Service(
 
 ONE_TURN_TIME=20
 PATCH_SIZE=160
-output = os.path.dirname(__file__)+"\\group_friend_cut.png"
 DB_PATH = os.path.expanduser('~/.hoshino/group_member_guess_winning_counter.db')
 SCORE_DB_PATH = os.path.expanduser('~/.hoshino/pcr_running_counter.db')
 DUEL_DB_PATH = os.path.expanduser('~/.hoshino/pcr_duel.db')
@@ -734,22 +734,13 @@ async def dailywife(bot, ev: CQEvent):
     url = f"http://q1.qlogo.cn/g?b=qq&nk={wife_id}&s=640"
     content = await (await aiorequests.get(url)).content
     img = Image.open(io.BytesIO(content))
-    w, h = img.size
+    w, h = 1012,1012
+    img = img.resize((w, h))
     l = random.randint(0, w - PATCH_SIZE)
     u = random.randint(0, h - PATCH_SIZE)
     cropped = img.crop((l, u, l + PATCH_SIZE, u + PATCH_SIZE))
-    cropped.save(output)
-    text={
-        "type": "text",
-        "data": {
-            "text": f"猜猜这个图片是哪位群友头像的一部分?({ONE_TURN_TIME}s后公布答案)"
-    }}
-    img={
-    "type": "image",
-    "data": {
-        "file": 'file:///'+output
-    }}
-    result=[text,img]
+    cropped = Seg.image(util.pic2b64(cropped))
+    result = f"猜猜这个图片是哪位群友头像的一部分?({ONE_TURN_TIME}s后公布答案) {cropped}"
     await bot.send(ev,result)
     await asyncio.sleep(ONE_TURN_TIME)
     if winner_judger.get_winner(ev.group_id) != '':
