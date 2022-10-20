@@ -712,7 +712,7 @@ async def get_wife_info(member_name,qqid,mode):
     return result  
     
 @sv.on_fullmatch('猜群友')
-async def dailywife(bot, ev: CQEvent):
+async def guess_group_friend(bot, ev: CQEvent):
     if winner_judger.get_on_off_status(ev.group_id):
         await bot.send(ev, "此轮游戏还没结束，请勿重复使用指令\n若卡住请发送重置猜群友")
         return
